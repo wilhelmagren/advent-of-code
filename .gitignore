@@ -1,0 +1,9 @@
+# Vim swap and tmp files
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]sw[a-p]
+*~
+
+# Python byte-compiled
+__pycache__/
