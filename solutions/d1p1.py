@@ -37,15 +37,11 @@ In this example, there are 7 measurements that are larger than the previous meas
 How many measurements are larger than the previous measurement?
 """
 import sys
+from aoc import data_generator
 def run(data):
     return sum(list(map(lambda x: 1 if data[x] > data[x-1] else 0, range(1, len(data)))))
 
-def data_generator(fname):
-    with open(fname, 'r') as f:
-        for line in f.readlines():
-            yield int(line.rstrip())
-
 if __name__ == '__main__':
     datafile = sys.argv[1]
-    print(run(list(data_generator(datafile))))
+    print(f'answer: {run(list(data_generator(datafile)))}')
 

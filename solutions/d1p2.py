@@ -35,6 +35,7 @@ In this example, there are 5 sums that are larger than the previous sum.
 Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
 """
 import sys
+from aoc import data_generator
 
 def run(data):
     stride = 3
@@ -46,12 +47,7 @@ def run(data):
             counter.append(1)
     return sum(counter)
 
-def data_generator(fname):
-    with open(fname, 'r') as f:
-        for line in f.readlines():
-            yield int(line.rstrip())
-
 if __name__ == '__main__':
     datafile = sys.argv[1]
-    print(run(list(data_generator(datafile))))
+    print(f'answer: {run(list(data_generator(datafile)))}')
 
