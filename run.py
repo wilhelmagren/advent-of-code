@@ -5,17 +5,20 @@ import os
 import sys
 import subprocess
 
-from aocio import intify, stringify, valid_days, valid_parts, DEFAULT_DAYS, DEFAULT_PARTS, VPRINT
+from solutions.aoc import intify, stringify, valid_days, valid_parts, valid_stats, DEFAULT_DAYS, DEFAULT_PARTS, VPRINT
+from solutions.aoc import Statistics
 warnings.filterwarnings('ignore', category=UserWarning)
 
 def parse_args():
     parser = argparse.ArgumentParser(prog='AoC2021 pipieline', usage='%(prog)s [days] [parts] [options]')
     parser.add_argument('-d', '--days', nargs='*', dest='days',
-        default=DEFAULT_DAYS, help='set what days to solve')
+            default=DEFAULT_DAYS, help='set what days to solve', required=True)
+    parser.add_argument('-s', '--stats', dest='stats', nargs=1,
+            help='set precision for benchmarking stats')
     parser.add_argument('-p', '--parts', nargs='*', dest='parts',
-        default=DEFAULT_PARTS, help='set which parts of a day to solve')
+            default=DEFAULT_PARTS, help='set which parts of a day to solve', required=True)
     parser.add_argument('-v', '--verbose', action='store_true', dest='verbose',
-        help='set logging in verbose mode')
+            help='set logging in verbose mode')
     args = parser.parse_args()
     return validate_args(args)
 
@@ -23,16 +26,22 @@ def validate_args(args):
     days = intify(args.days)
     parts = intify(args.parts)
     verbose = args.verbose
+    stats = args.stats
 
     if not valid_days(days):
         raise ValueError(f'invalid formatting on what days to solve! days={days}')
 
     if not valid_parts(parts):
         raise ValueError(f'invalid formatting on what parts to solve! parts={parts}')
-
-    return dict(verbose=verbose, days=days, parts=parts)
     
-def _solve(day, part, verbose):
+    if stats:
+        stats = stats[0]
+        if not valid_stats(stats):
+            raise ValueError(f'invalid formatting for statistics precision! stats={stats}')
+
+    return dict(verbose=verbose, days=days, parts=parts, stats=stats)
+    
+def _solve(day, part, verbose, statistics):
     VPRINT(f'\nSolving day={day:02d} part={part}', verbose)
     VPRINT(f'---------------------', verbose)
     solver_file = stringify(day, part)
@@ -43,17 +52,22 @@ def _solve(day, part, verbose):
     t_start = time.perf_counter_ns()
     os.system(f'python3 {solver_file} {data_file}')
     t_end = time.perf_counter_ns()
-    return t_end - t_start
-
+    approximate_execution_time = t_end - t_start
+    statistics.update(approximate_execution_time)
+    return approximate_execution_time
 
 def solve(args):
     days = args['days']
     parts = args['parts']
     verbose = args['verbose']
+    statistics = Statistics(parts, args['stats'])
 
-    return list(_solve(day, part, verbose) for part in parts for day in days)
+    list(_solve(day, part, verbose, statistics) for part in parts for day in days)
+    return statistics
 
 if __name__ == '__main__':
     args = parse_args()
-    times = solve(args)
-    print(times)
+    statistics = solve(args)
+    if args['stats']:
+        statistics.calculate()
+
