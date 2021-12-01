@@ -6,9 +6,9 @@ To get solutions and approximate execution times for implementations, please exe
 usage: AoC2021 pipieline [days] [parts] [options]
 optional arguments:
 -h, --help            show this help message and exit
--d [DAYS [DAYS ...]], --days [DAYS [DAYS ...]]
+-d, --days [DAYS [DAYS ...]]
                       set what days to solve
--p [PARTS [PARTS ...]], --parts [PARTS [PARTS ...]]
+-p, --parts [PARTS [PARTS ...]]
                       set which parts of a day to solve
 -v, --verbose         set logging in verbose mode
 
