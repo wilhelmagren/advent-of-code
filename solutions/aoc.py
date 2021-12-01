@@ -51,8 +51,8 @@ class Statistics:
         print(f'----------------------------------------------------------')
         print(f'slowest: day {max_day+1} part {max_part+1}')
         print(f'fastest: day {min_day+1} part {min_part+1}')
-        print(f'variance: {variance}')
-        print(f'mean: {mean}')
+        print(f'variance: {np.round(variance, 4)}')
+        print(f'mean: {np.round(mean, 4)}')
 
 
 def VPRINT(msg, verbose):
