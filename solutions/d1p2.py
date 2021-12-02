@@ -34,23 +34,36 @@ In this example, there are 5 sums that are larger than the previous sum.
 
 Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?
 """
+import time
 import sys
-from aoc import data_generator
+from aoc import data_generator, write_times
 
 def intify_list(l):
     return list(int(item) for item in l)
 
 def run(data):
     stride = 3
-    sums = [sum(intify_list(data[0:stride]))]
+    sums = [sum(data[0:stride])]
     counter = []
     for idx in range(1, len(data)):
-        sums.append(sum(intify_list(data[idx:idx+stride])))
+        sums.append(sum((data[idx:idx+stride])))
         if sums[-1] > sums[-2]:
             counter.append(1)
     return sum(counter)
 
 if __name__ == '__main__':
     datafile = sys.argv[1]
-    print(f'answer: {run(list(data_generator(datafile)))}')
+    t_io_start = time.perf_counter_ns()
+    data = intify_list(list(data_generator(datafile)))
+    t_io_end = time.perf_counter_ns()
+    t_start = time.perf_counter_ns()
+    answer = run(data)
+    t_end = time.perf_counter_ns()
+    io_time = (t_io_end-t_io_start)/1000000
+    solve_time = (t_end-t_start)/1000000
+    print(f'answer: {answer}')
+    print(f'io time: {(t_io_end-t_io_start)/1000000} ms')
+    print(f'solve time: {(t_end-t_start)/1000000} ms')
+    print(f'total time: {io_time + solve_time} ms')
+    write_times(io_time, solve_time)
 

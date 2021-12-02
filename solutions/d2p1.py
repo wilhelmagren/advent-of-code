@@ -33,12 +33,9 @@ After following these instructions, you would have a horizontal position of 15 a
 
 Calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?
 """
+import time
 import sys
-
-def data_generator(fname):
-    with open(fname, 'r') as f:
-        for line in f.readlines():
-            yield line.rstrip()
+from aoc import data_generator, write_times
 
 def run(data):
     dirmap = {'forward': (1, 1),
@@ -54,5 +51,17 @@ def run(data):
 
 if __name__ == '__main__':
     datafile = sys.argv[1]
-    print(f'answer: {run(list(data_generator(datafile)))}')
+    t_io_start = time.perf_counter_ns()
+    data = list(data_generator(datafile))
+    t_io_end = time.perf_counter_ns()
+    t_start = time.perf_counter_ns()
+    answer = run(data)
+    t_end = time.perf_counter_ns()
+    io_time = (t_io_end-t_io_start)/1000000
+    solve_time = (t_end-t_start)/1000000
+    print(f'answer: {answer}')
+    print(f'io time: {(t_io_end-t_io_start)/1000000} ms')
+    print(f'solve time: {(t_end-t_start)/1000000} ms')
+    print(f'total time: {io_time + solve_time} ms')
+    write_times(io_time, solve_time)
 
