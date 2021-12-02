@@ -34,7 +34,7 @@ class Statistics:
     def update(self, d):
         d = self._scale(d)
         self.data.append(d)
-        print(f'approximate time: {d}{precision_map[self.precision]}')
+        print(f'time: {d}{precision_map[self.precision]}')
 
     def calculate(self):
         argmax = np.argmax(self.data) 
@@ -47,8 +47,8 @@ class Statistics:
         max_part = argmax % self.n_parts
         min_part = argmin % self.n_parts
 
-        print(f'\ncalculating sufficient statistics based on solved problems')
-        print(f'----------------------------------------------------------')
+        print(f'\nPropagated sufficient statistics')
+        print(f'--------------------------------')
         print(f'slowest: day {max_day+1} part {max_part+1}')
         print(f'fastest: day {min_day+1} part {min_part+1}')
         print(f'variance: {np.round(variance, 4)}')
@@ -98,5 +98,5 @@ def valid_stats(stats):
 def data_generator(fname):
     with open(fname, 'r') as f:
         for line in f.readlines():
-            yield int(line.rstrip())
+            yield line.rstrip()
 
