@@ -1,4 +1,4 @@
-# 🐍 Python 3.8+ template for Advent of Code
+# 🐍 Python 3.8+ module for Advent of Code
 Merry christmas! :christmas_tree: :santa:
 
 This repo contains a template for AoC w/ **Python 3.8+** and my personal solutions for the 2021 problems. It is implemented using mostly built in libraries, except for the [numpy](https://numpy.org/) requirement. To run the pipeline it requires a specific directory structure. Make sure that your data files are stored accordingly:
