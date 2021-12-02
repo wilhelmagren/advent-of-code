@@ -1,3 +1,14 @@
+"""utility function implementations for the AdventofCode (AoC) pipeline.
+wow! take a look at that sexy banner, dont you want one as well?...
+ - (https://patorjk.com/software/taag/#p=display&f=Slant&t=Advent%20of%20Code)
+
+this file is a hot pile of garbage right now, but the functions gets the job done.
+TODO: clean up some deprecated functions and look at adding some more times
+        stats for each problem solution. make the code good...
+
+Authors: Wilhelm Ågren <wagren@kth.se>
+Last edited: 02-12-2021
+"""
 import os
 import sys
 import numpy as np
@@ -9,7 +20,6 @@ DEFAULTS = dict(y=range(2018, 2022),
                 p=range(1, 3),
                 precision='ms')
 
-
 class colors:
     BLUE = '\033[94m'
     GREEN = '\033[92m'
@@ -17,6 +27,22 @@ class colors:
     RED = '\033[31m'
     END = '\033[0m'
     BOLD = '\033[1m'
+
+BANNER = f"""
+{colors.BOLD}{colors.RED}
+==========================================================================={colors.GREEN}
+---------------------------------------------------------------------------{colors.END}
+    ___       __                 __           ____   ______          __   
+   /   | ____/ /   _____  ____  / /_   ____  / __/  / ____/___  ____/ /__ 
+  / /| |/ __  / | / / _ \/ __ \/ __/  / __ \/ /_   / /   / __ \/ __  / _ \\
+ / ___ / /_/ /| |/ /  __/ / / / /_   / /_/ / __/  / /___/ /_/ / /_/ /  __/
+/_/  |_\__,_/ |___/\___/_/ /_/\__/   \____/_/     \____/\____/\__,_/\___/ 
+{colors.GREEN}
+---------------------------------------------------------------------------{colors.RED}
+===========================================================================
+{colors.END}
+"""
+
 
 def APRINT(answer, t, decimals=3):
     t_ms = np.round(t / 1000000, decimals)
