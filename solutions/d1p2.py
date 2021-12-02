@@ -37,12 +37,15 @@ Consider sums of a three-measurement sliding window. How many sums are larger th
 import sys
 from aoc import data_generator
 
+def intify_list(l):
+    return list(int(item) for item in l)
+
 def run(data):
     stride = 3
-    sums = [sum(data[0:stride])]
+    sums = [sum(intify_list(data[0:stride]))]
     counter = []
     for idx in range(1, len(data)):
-        sums.append(sum(data[idx:idx+stride]))
+        sums.append(sum(intify_list(data[idx:idx+stride])))
         if sums[-1] > sums[-2]:
             counter.append(1)
     return sum(counter)

@@ -39,7 +39,7 @@ How many measurements are larger than the previous measurement?
 import sys
 from aoc import data_generator
 def run(data):
-    return sum(list(map(lambda x: 1 if data[x] > data[x-1] else 0, range(1, len(data)))))
+    return sum(list(map(lambda x: 1 if int(data[x]) > int(data[x-1]) else 0, range(1, len(data)))))
 
 if __name__ == '__main__':
     datafile = sys.argv[1]
