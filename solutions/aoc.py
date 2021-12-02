@@ -74,12 +74,14 @@ def exists(part, tpe='d'):
             return True
     return False
 
+def reformat_exists(data, tpe='d'):
+    return list(item for item in data if exists(item, tpe=tpe))
+
 def valid_days(days):
     requirements = [
             all(list(map(lambda x: x in DEFAULT_DAYS, days))),
             all(list(map(lambda x: type(x) is int, days))),
             len(days) <= MAX_DAYS,
-            all(list(map(lambda x: exists(x, tpe='d'), days)))
             ]
     return all(requirements)
 
@@ -88,7 +90,6 @@ def valid_parts(parts):
             all(list(map(lambda x: x in DEFAULT_PARTS, parts))),
             all(list(map(lambda x: type(x) is int, parts))),
             len(parts) <= MAX_PARTS,
-            all(list(map(lambda x: exists(x, tpe='p'), parts)))
             ]
     return all(requirements)
 

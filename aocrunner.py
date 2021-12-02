@@ -5,18 +5,19 @@ import os
 import sys
 import subprocess
 
-from solutions.aoc import intify, stringify, valid_days, valid_parts, valid_stats, DEFAULT_DAYS, DEFAULT_PARTS, VPRINT
+from solutions.aoc import DEFAULT_DAYS, DEFAULT_PARTS, VPRINT
+from solutions.aoc import reformat_exists, intify, stringify, valid_days, valid_parts, valid_stats
 from solutions.aoc import Statistics
 warnings.filterwarnings('ignore', category=UserWarning)
 
 def parse_args():
     parser = argparse.ArgumentParser(prog='AoC2021 pipieline', usage='%(prog)s [days] [parts] [options]')
     parser.add_argument('-d', '--days', nargs='*', dest='days',
-            default=DEFAULT_DAYS, help='set what days to solve', required=True)
+            default=DEFAULT_DAYS, help='set what days to solve')
     parser.add_argument('-s', '--stats', dest='stats', nargs=1,
-            help='set precision for benchmarking stats')
+            help='set precision for benchmarking stats', required=True)
     parser.add_argument('-p', '--parts', nargs='*', dest='parts',
-            default=DEFAULT_PARTS, help='set which parts of a day to solve', required=True)
+            default=DEFAULT_PARTS, help='set which parts of a day to solve')
     parser.add_argument('-v', '--verbose', action='store_true', dest='verbose',
             help='set logging in verbose mode')
     args = parser.parse_args()
@@ -38,6 +39,9 @@ def validate_args(args):
         stats = stats[0]
         if not valid_stats(stats):
             raise ValueError(f'invalid formatting for statistics precision! stats={stats}')
+
+    days = reformat_exists(days, tpe='d')
+    parts = reformat_exists(parts, tpe='p')
 
     return dict(verbose=verbose, days=days, parts=parts, stats=stats)
     
