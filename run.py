@@ -1,7 +1,17 @@
+"""implementation of AoC pipeline, manually pick what years, days, and parts
+you want to solve through the CLI or just run all possible by not specifying.
+if there exists a solution implementation to a problem, the solver expects
+there to be a corresponding data file in data/<YEAR>/ which it can read input
+from. otherwise the pipeline will crash. yeah, though luck kiddo...
+
+Authors: Wilhelm Ågren <wagren@kth.se>
+Last edited: 02-12-2021
+"""
 import argparse
 
 from aoc.solutions import Solutions
-from aoc.utils import generator, intify, validate, check_problems, format_problems, get_datafiles, DEFAULTS
+from aoc.utils import colors, generator, intify, validate, get_ydp, check_problems, format_problems, get_datafiles, DEFAULTS, APRINT
+
 
 def parse_args():
     parser = argparse.ArgumentParser(prog='AoC pipeline', usage='%(prog)s year(s) day(s) part(s) [options]')
@@ -37,6 +47,10 @@ if __name__ == '__main__':
     problems, datafiles = validate_args(args)
     solutions = Solutions()
     for problem, datafile in zip(problems, datafiles):
+        year, day, part = get_ydp(problem)
+        print(f'\n{colors.BOLD}Solving:  year={year}  day={int(day):02d}  part={part}')
+        print(f'-----------------------------------{colors.END}')
         data = list(generator(datafile, mode='r'))
-        print(getattr(solutions, problem)(data))
+        (answer, t) = getattr(solutions, problem)(data)
+        APRINT(answer, t)
 
