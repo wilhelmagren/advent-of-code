@@ -10,7 +10,7 @@ Last edited: 02-12-2021
 import argparse
 
 from aoc.solutions import Solutions
-from aoc.utils import colors, generator, intify, validate, get_ydp, check_problems, format_problems, get_datafiles, DEFAULTS, APRINT
+from aoc.utils import colors, generator, intify, validate, get_ydp, check_problems, format_problems, get_datafiles, DEFAULTS, APRINT, BANNER
 
 
 def parse_args():
@@ -46,6 +46,7 @@ if __name__ == '__main__':
     args = parse_args()
     problems, datafiles = validate_args(args)
     solutions = Solutions()
+    print(BANNER)
     for problem, datafile in zip(problems, datafiles):
         year, day, part = get_ydp(problem)
         print(f'\n{colors.BOLD}Solving:  year={year}  day={int(day):02d}  part={part}')
@@ -53,4 +54,4 @@ if __name__ == '__main__':
         data = list(generator(datafile, mode='r'))
         (answer, t) = getattr(solutions, problem)(data)
         APRINT(answer, t)
-
+                                                                 
