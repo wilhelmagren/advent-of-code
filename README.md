@@ -8,21 +8,30 @@ optional arguments:
 -h, --help            show this help message and exit
 -d, --days [DAYS [DAYS ...]]
                       set what days to solve
+-s STATS, --stats STATS
+                      set precision for benchmarking stats
 -p, --parts [PARTS [PARTS ...]]
                       set which parts of a day to solve
 -v, --verbose         set logging in verbose mode
 
 
-$ python3 run.py -d 1 -p 1 2 -v
+$ python3 run.py -d 1 -p 1 2 -v -s micro
 Solving day=01 part=1
 ---------------------
 answer: 1393
-time: 84845700 ns
+time: 263782.0μs
 
 Solving day=01 part=2
 ---------------------
 answer: 1359
-time: 45983800 ns     
+time: 262318.9μs
+
+Propagated sufficient statistics
+--------------------------------
+slowest:  day 1 part 1
+fastest:  day 1 part 2
+variance:  535165.4025
+mean:  263050.45   
 ```
 
 If you have any suggestions on how to improve this pipeline, contact me or create a pull request!
