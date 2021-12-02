@@ -62,7 +62,7 @@ def solve(args):
     verbose = args['verbose']
     statistics = Statistics(parts, args['stats'])
 
-    list(_solve(day, part, verbose, statistics) for part in parts for day in days)
+    list(_solve(day, part, verbose, statistics) for day in days for part in parts)
     return statistics
 
 if __name__ == '__main__':
