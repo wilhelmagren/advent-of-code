@@ -159,7 +159,6 @@ class Solutions(object):
         for key, vals in amounts.items():
             gamma += '1' if sum(vals) > int(len(vals)/2) else '0'
 
-        
         epsilon = int(gamma,2)^int(''+'1'*bitlen,2)
         answer = int(gamma,2)*epsilon
         t_stop = time.perf_counter_ns()
