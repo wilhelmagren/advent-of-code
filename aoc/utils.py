@@ -44,7 +44,7 @@ BANNER = f"""
 """
 
 
-def APRINT(s_t, d_t, decimals=3):
+def APRINT(s_t, d_t, decimals=3, PAD=8):
     s_t_ms = np.round(s_t / 1000_000, decimals)
     d_t_ms = np.round(d_t / 1000_000, decimals)
     t_t_ms = np.round(s_t_ms + d_t_ms, decimals)
@@ -66,7 +66,10 @@ def APRINT(s_t, d_t, decimals=3):
         t_color = colors.YELLOW
     elif 2. <= t_t_ms:
         t_color = colors.RED
-    print(f'    {t_color}{t_t_ms:.3f} ms{colors.END}         {d_color}{d_t_ms:.3f} ms{colors.END}           {s_color}{s_t_ms:.3f} ms{colors.END}\n')
+    t_t_ms = f'{t_t_ms:.3f}'.center(PAD)
+    d_t_ms = f'{d_t_ms:.3f}'.center(PAD)
+    s_t_ms = f'{s_t_ms:.3f}'.center(PAD)
+    print(f'   {t_color}{t_t_ms}ms{colors.END}        {d_color}{d_t_ms}ms{colors.END}        {s_color}{s_t_ms}ms{colors.END}\n')
 
 def validate(iterable, condition):
     requirements = [
