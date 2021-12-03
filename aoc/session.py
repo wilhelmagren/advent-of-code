@@ -49,7 +49,7 @@ class UserSession:
                     'could not curl input for {year=} {day=}. subprocess response code {status=}')
         self.buffer.write(curl_output) if print_output else None
 
-    def solve(self, problems=None, datafiles=None):
+    def solve(self, problems=None, datafiles=None, print_progress=False):
         if problems is None:
             problems = self.problems
         if datafiles is None:
@@ -63,21 +63,23 @@ class UserSession:
             if not datafile_exists(problem):
                 self.buffer.write(f'[!]  datafile for {problem=} doesn`t exist, fetching it...')
                 asyncio.run(self.fetch_input(problem))
-            self.buffer.write(f'[*]  solving {problem=}')
+            self.buffer.write(f'[*]  solving {problem=}') if print_progress else None
             data, d_time = self._generate(datafile)
             answer, s_time = getattr(self.solver, problem)(data)
             self.results[problem.split('p')[0]].append((answer, d_time, s_time))
     
-    def stats(self, decimals=3, padding=8):
+    def stats(self, decimals=3, padding=6):
+        self.buffer.write(f'\n{colors.BOLD}   Problem         Answer         Total time        Data-io time        Solving time')
+        self.buffer.write(f'======================================================================================={colors.END}')
         for key, val in self.results.items():
             year, day = key.split('d')
             year = year[1:]
             for part, values in enumerate(val):
                 answer, d_time, s_time = values
-                self.buffer.write(f'\n{colors.BOLD}[*]  Answer to {year} day {int(day):02d} part {part+1}: {colors.BLUE}{answer}{colors.END}')
-                self.buffer.write(f'{colors.BOLD}======================================================')
-                self.buffer.write(f'   total time      data-io time      solving time')
-                self.buffer.write(f'------------------------------------------------------{colors.END}')
+                self.buffer.write(f'')
+                #self.buffer.write(f'\n{colors.BOLD}[*]  Answer to {year} day {int(day):02d} part {part+1}: {colors.BLUE}{answer}{colors.END}')
+                #self.buffer.write(f'   total time      data-io time      solving time')
+                #self.buffer.write(f'------------------------------------------------------{colors.END}')
                 d_time_ms = np.round(d_time / 1_000_000, decimals).astype(float)
                 s_time_ms = np.round(s_time / 1_000_000, decimals).astype(float)
                 t_time_ms = np.round(d_time_ms + s_time_ms, decimals).astype(float)
@@ -104,7 +106,8 @@ class UserSession:
                 d_time_ms = f'{d_time_ms:.3f}'.center(padding)
                 s_time_ms = f'{s_time_ms:.3f}'.center(padding)
                 t_time_ms = f'{t_time_ms:.3f}'.center(padding)
-                self.buffer.write(f'   {t_color}{t_time_ms}ms{colors.END}        {d_color}{d_time_ms}ms{colors.END}        {s_color}{s_time_ms}ms{colors.END}\n')
+                answer = f'{answer}'.center(padding+padding)
+                self.buffer.write(f'  {year}-{int(day):02d}-{part+1}     {answer}       {t_color}{t_time_ms}ms{colors.END}           {d_color}{d_time_ms}ms{colors.END}            {s_color}{s_time_ms}ms{colors.END}\n')
 
 
 
