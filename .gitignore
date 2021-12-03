@@ -7,3 +7,6 @@
 
 # Python byte-compiled
 __pycache__/
+
+# advent-of-code session cookie
+*.token
