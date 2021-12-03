@@ -33,10 +33,12 @@ optional arguments:
                         set what days to solve
   -p [PARTS [PARTS ...]], --parts [PARTS [PARTS ...]]
                         set what parts of a day to solve
+  -v, --verbose         set printing mode for solution times
+  -b, --banner          print AoC banner at pipeline start
 ```
 
 An example can be seen below with my solutions to the first two days of the 2020 problems. (Gotta have a banner! :star:)<br>
-![AoC pipeline example](example.png)
+![AoC pipeline example](pipline-example.png)
 
 If you have any suggestions on how to improve this pipeline, contact me or create a pull request!
 <br>Reach me at wagren@kth.se, happy star-hunting! :star: :gift:
