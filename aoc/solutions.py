@@ -150,13 +150,46 @@ class Solutions(object):
 
     def f2021d3p1(self, data):
         t_start = time.perf_counter_ns()
-        answer = None
+        import bitstring
+        bitlen = len(data[0])
+        amounts = defaultdict(list)
+        for line in data:
+            for idx, char in enumerate(line):
+                amounts[idx].append(int(char))
+        gamma = ''
+        for key, vals in amounts.items():
+            gamma += '1' if sum(vals) > int(len(vals)/2) else '0'
+
+        
+        epsilon = ''+'1'*bitlen
+        epsilon = int(gamma,2)^int(epsilon,2)
+        #epsilon = bin(epsilon)[2:].zfill(bitlen)
+        answer = int(gamma,2)*epsilon
         t_stop = time.perf_counter_ns()
         return (answer, t_stop-t_start)
 
     def f2021d3p2(self, data):
         t_start = time.perf_counter_ns()
-        answer = None
+        def _rec(iterable, bitidx, oxygen):
+            if len(iterable) == 1:
+                return iterable[0]
+            more_ones = 0
+            for item in iterable:
+                if item[bitidx] == '1':
+                    more_ones += 1
+            char = None
+            if oxygen:
+                more_ones = more_ones >= (len(iterable) - more_ones)
+                char = '1' if more_ones else '0'
+            else:
+                more_ones = more_ones < (len(iterable) - more_ones)
+                char = '1' if more_ones else '0'
+            print(more_ones, char)
+            return _rec(list(item for item in iterable if item[bitidx] == char), bitidx+1, oxygen)
+
+        oxygen = _rec(data, 0, True)
+        scrubber = _rec(data, 0, False)
+        answer = int(oxygen, 2)*int(scrubber, 2)
         t_stop = time.perf_counter_ns()
         return (answer, t_stop-t_start)
 
