@@ -52,9 +52,9 @@ def APRINT(s_t, d_t, decimals=3, PAD=8):
     d_color = colors.GREEN
     t_color = colors.GREEN
     # solution
-    if 1. < s_t_ms < 10.:
+    if 1. < s_t_ms < 3.:
         s_color = colors.YELLOW
-    elif 10. <= s_t_ms:
+    elif 3. <= s_t_ms:
         s_color = colors.RED
     # data reading io
     if .5 <= d_t_ms < 1.:
@@ -62,9 +62,9 @@ def APRINT(s_t, d_t, decimals=3, PAD=8):
     elif 1. <= d_t_ms:
         d_color = colors.RED
     # total
-    if 1. <= t_t_ms < 2.:
+    if 1. <= t_t_ms < 3.:
         t_color = colors.YELLOW
-    elif 2. <= t_t_ms:
+    elif 3. <= t_t_ms:
         t_color = colors.RED
     t_t_ms = f'{t_t_ms:.3f}'.center(PAD)
     d_t_ms = f'{d_t_ms:.3f}'.center(PAD)
