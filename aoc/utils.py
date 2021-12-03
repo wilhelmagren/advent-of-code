@@ -44,16 +44,29 @@ BANNER = f"""
 """
 
 
-def APRINT(answer, t, decimals=3):
-    t_ms = np.round(t / 1000000, decimals)
-    color = colors.GREEN
-
-    print(f'[*] answer:\t{colors.BLUE}{answer}{colors.END}')
-    if 10 <= t_ms < 250:
-        color = colors.YELLOW
-    elif 250 <= t_ms:
-        color = colors.RED
-    print(f'[*] time:\t{color}{t_ms} ms{colors.END}')
+def APRINT(s_t, d_t, decimals=3):
+    s_t_ms = np.round(s_t / 1000_000, decimals)
+    d_t_ms = np.round(d_t / 1000_000, decimals)
+    t_t_ms = np.round(s_t_ms + d_t_ms, decimals)
+    s_color = colors.GREEN
+    d_color = colors.GREEN
+    t_color = colors.GREEN
+    # solution
+    if 1. < s_t_ms < 10.:
+        s_color = colors.YELLOW
+    elif 10. <= s_t_ms:
+        s_color = colors.RED
+    # data reading io
+    if .5 <= d_t_ms < 1.:
+        d_color = colors.YELLOW
+    elif 1. <= d_t_ms:
+        d_color = colors.RED
+    # total
+    if 1. <= t_t_ms < 2.:
+        t_color = colors.YELLOW
+    elif 2. <= t_t_ms:
+        t_color = colors.RED
+    print(f'    {t_color}{t_t_ms:.3f} ms{colors.END}         {d_color}{d_t_ms:.3f} ms{colors.END}           {s_color}{s_t_ms:.3f} ms{colors.END}\n')
 
 def validate(iterable, condition):
     requirements = [
