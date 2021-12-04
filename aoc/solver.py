@@ -44,6 +44,43 @@ def _traverse(tple):
             trees +=1
     return trees
 
+def _create_bingo(data):
+    boards = list()
+    count = 0
+    for idx, line in enumerate(data):
+        line = line.split()
+        if not line:
+            boards.append(list())
+            continue
+        boards[-1].append(line)
+    return boards
+
+def _mark(num, board):
+    for yidx, row in enumerate(board):
+        for xidx, val in enumerate(row):
+            if num == val:
+                board[yidx][xidx] += ',True'
+def _hasbingo(board):
+    for xidx, row in enumerate(board):
+        if all(list(',True' in item for item in row)):
+            return True
+    for xidx in range(len(board[0])):
+        column = list()
+        for yidx in range(len(board)):
+            column.append(board[yidx][xidx])
+        if all(list(',True' in item for item in column)):
+            return True
+    return False
+
+def _sumofnumbers(board):
+    summer = 0
+    for yidx, row in enumerate(board):
+        for xidx, item in enumerate(row):
+            if ',True' not in item:
+                val = int(item.split(',')[0])
+                summer += val
+    return summer
+            
 class Solutions:
 
     def f2020d1p1(self, data):
@@ -185,4 +222,47 @@ class Solutions:
         answer = outputs[0]*outputs[1]
         t_stop = time.perf_counter_ns()
         return (answer, t_stop-t_start)
+
+    def f2021d4p1(self, data):
+        t_start = time.perf_counter_ns()
+        numbers = data[0].split(',')
+        boards = _create_bingo(data[1:])
+        foundbingo = False
+        answer = None
+        for number in numbers:
+            if foundbingo:
+                break
+            for board in boards:
+                _mark(number, board)
+                if _hasbingo(board):
+                    sumonum = _sumofnumbers(board)
+                    answer = int(number) * sumonum
+                    foundbingo = True
+        t_stop = time.perf_counter_ns()
+        return (answer, t_stop-t_start)
+    
+    def f2021d4p2(self, data):
+        t_start = time.perf_counter_ns()
+        numbers = data[0].split(',')
+        boards = _create_bingo(data[1:])
+        foundbingo = False
+        answer = None
+        winboards = list()
+        for number in numbers:
+            for board in boards:
+                if _hasbingo(board):
+                    continue
+                _mark(number, board)
+                if _hasbingo(board):
+                    sumonum = _sumofnumbers(board)
+                    answer = int(number) * sumonum
+                    winboards.append(answer)
+        winboards = list(item for item in winboards if item != 0)
+        answer = winboards[-1]
+        t_stop = time.perf_counter_ns()
+        return (answer, t_stop-t_start)
+
+
+
+
 
