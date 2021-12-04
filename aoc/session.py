@@ -35,7 +35,7 @@ class UserSession:
         data = list(generator(datafile, mode=mode))
         return data, time.perf_counter_ns() - t_start
 
-    async def fetch_input(self, problem, print_output=False, sleep=10, **kwargs):
+    async def fetch_input(self, problem, print_output=False, sleep=2, **kwargs):
         year, day, _ = split_problem(problem)
         datadir = os.path.join(os.getcwd(), f'data/{year}/')
         if not os.path.isdir(datadir):
@@ -68,9 +68,9 @@ class UserSession:
             answer, s_time = getattr(self.solver, problem)(data)
             self.results[problem.split('p')[0]].append((answer, d_time, s_time))
     
-    def stats(self, decimals=3, padding=6):
-        self.buffer.write(f'\n{colors.BOLD}   Problem         Answer         Total time        Data-io time        Solving time')
-        self.buffer.write(f'======================================================================================={colors.END}')
+    def stats(self, decimals=3, padding=8):
+        self.buffer.write(f'\n{colors.BOLD}   Problem           Answer           Total time          Data-io time          Solving time')
+        self.buffer.write(f'==============================================================================================={colors.END}')
         for key, val in self.results.items():
             year, day = key.split('d')
             year = year[1:]
@@ -92,22 +92,22 @@ class UserSession:
                     d_color = colors.RED
                 
                 # solution time in ms
-                if 1. <= s_time_ms < 3.:
+                if 5. <= s_time_ms < 50.:
                     s_color = colors.YELLOW
-                elif 3. <= s_time_ms:
+                elif 50. <= s_time_ms:
                     s_color = colors.RED
                 
                 # total time in ms
-                if 1. <= t_time_ms < 3.:
+                if 6. <= t_time_ms < 51.:
                     t_color = colors.YELLOW
-                elif 3. <= t_time_ms:
+                elif 51. <= t_time_ms:
                     t_color = colors.RED
 
                 d_time_ms = f'{d_time_ms:.3f}'.center(padding)
                 s_time_ms = f'{s_time_ms:.3f}'.center(padding)
                 t_time_ms = f'{t_time_ms:.3f}'.center(padding)
-                answer = f'{answer}'.center(padding+padding)
-                self.buffer.write(f'  {year}-{int(day):02d}-{part+1}     {answer}       {t_color}{t_time_ms}ms{colors.END}           {d_color}{d_time_ms}ms{colors.END}            {s_color}{s_time_ms}ms{colors.END}\n')
+                answer = f'{answer}'.center(padding+padding + 1)
+                self.buffer.write(f'  {year}-{int(day):02d}-{part+1}    {answer}      {t_color}{t_time_ms}ms{colors.END}            {d_color}{d_time_ms}ms{colors.END}            {s_color}{s_time_ms}ms{colors.END}\n')
 
 
 
