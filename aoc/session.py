@@ -56,7 +56,7 @@ class UserSession:
             datafiles = self.datafiles
 
         if not problems:
-            self.buffer.write(f'{colors.BOLD}{colors.RED}[!]  no solutions found for the given problems{colors.END}')
+            self.buffer.write(f'{colors.BOLD}{colors.RED}[!]  no solution implementations found for the given problems{colors.END}')
             return
 
         for problem, datafile in zip(problems, datafiles):
