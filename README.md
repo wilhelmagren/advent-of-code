@@ -1,27 +1,29 @@
-# 🐍 Python 3.8+ module for Advent of Code
-Merry christmas! :christmas_tree: :santa:
+# Advent-of-Code Python package
+Merry christmas and happy star hunting! :christmas_tree: :santa:
 
+## Directory setup
 This repo contains a template for AoC w/ **Python 3.8+** and my personal solutions for the 2021 problems. It is implemented using mostly built in libraries, except for the [numpy](https://numpy.org/) requirement. To run the pipeline it requires a specific directory structure. Make sure that your data files are stored accordingly:
 ```
 advent-of-code/
+├── aoc/
+│   ├── __init__.py
+|   ├── session.py
+│   ├── solver.py
+│   └── utils.py
 ├── data/
 │   ├── 2019/
 |   |   └── ...
 │   ├── 2020/
 |   |   └── ...
 │   └── 2021/
-|       ├── d1p1.dat
-|       ├── d1p2.dat
+|       ├── d1.in
+|       ├── d2.in
 |       └── ...
-├── aoc/
-│   ├── __init__.py
-│   ├── solutions.py
-│   └── utils.py
 ├── run.py
-└── solver.sh
+└── session.token
 ```
 
-All solutions are to be implemented as a function with a specific name in the Solutions class. The formatting of the function name should be of the form ```f<YEAR>d<DAY>p<PART>```, where the variables in ```<>```specifies the year, day, and part of a problem that the function solves. If you want to run all available solutions simply run the ```solver.sh```. To run specific problems you may invoke the ```run.py``` file with arguments for **year(s)**, **day(s)**, and **part(s)** accordingly:
+All solutions are to be implemented as a function with a specific name in the Solutions class found in the file ```solver.py```. The formatting of the function name should be of the form ```f<YEAR>d<DAY>p<PART>```, where the variables in ```<>```specifies the year, day, and part of a problem that the function solves. To run the advent-of-code pipeline you may run the script ```run.py``` with either no arguments to show all your implemented solutions, or specify year-day-part of what problems to solve:
 ```
 usage: python3 run.py [options]
 
@@ -37,8 +39,7 @@ optional arguments:
   -b, --banner          print AoC banner at pipeline start
 ```
 
-An example can be seen below with my solutions to the first two days of the 2020 problems. (Gotta have a banner! :star:)<br>
-![AoC pipeline example](pipeline-example.png)
-
+## Contact and license
 If you have any suggestions on how to improve this pipeline, contact me or create a pull request!
-<br>Reach me at wagren@kth.se, happy star-hunting! :star: :gift:
+<br>Author: Wilhelm Ågren, wagren@kth.se
+<br>License: GNU General Public License v3.0
