@@ -298,8 +298,9 @@ class Solutions:
                     mapping[(x, y1)] += 1
             elif np.abs(x1-x2) == np.abs(y1-y2):
                 # Diagonal
-                xarange = range(x1, x2 + 1 if x2 > x1 else x2 - 1, 1 if x2 > x1 else -1)
-                yarange = range(y1, y2 + 1 if y2 > y1 else y2 - 1, 1 if y2 > y1 else -1)
+                dx, dy = 1 if x2 > x1 else -1, 1 if y2 > y1 else -1
+                xarange = range(x1, x2 + dx, dx)
+                yarange = range(y1, y2 + dy, dy)
                 for x, y in zip(xarange, yarange):
                     mapping[(x,y)] += 1
         answer = sum(list(map(lambda x: 1 if x >= 2 else 0, mapping.values())))
