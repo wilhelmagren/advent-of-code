@@ -262,7 +262,47 @@ class Solutions:
         t_stop = time.perf_counter_ns()
         return (answer, t_stop-t_start)
 
+    def f2021d5p1(self, data):
+        t_start = time.perf_counter_ns()
+        mapping = defaultdict(int)
+        for line in data:
+            split = line.split(' ')
+            x1,y1 = list(map(lambda x: int(x), split[0].split(',')))
+            x2,y2 = list(map(lambda x: int(x), split[2].split(',')))
+            if x1 == x2:
+                for y in range(min(y1, y2), max(y1, y2) + 1):
+                    mapping[(x1, y)] += 1
+            elif y1 == y2:
+                for x in range(min(x1, x2), max(x1, x2) + 1):
+                    mapping[(x, y1)] += 1
 
+        answer = sum(list(map(lambda x: 1 if x >= 2 else 0, mapping.values())))
+        t_stop = time.perf_counter_ns()
+        return (answer, t_stop-t_start)
 
-
+    def f2021d5p2(self, data):
+        t_start = time.perf_counter_ns()
+        mapping = defaultdict(int)
+        for line in data:
+            split = line.split(' ')
+            x1,y1 = list(map(lambda x: int(x), split[0].split(',')))
+            x2,y2 = list(map(lambda x: int(x), split[2].split(',')))
+            if x1 == x2:
+                # Vertical
+                for y in range(min(y1, y2), max(y1, y2) + 1):
+                    mapping[(x1, y)] += 1
+            
+            elif y1 == y2:
+                # Horizontal
+                for x in range(min(x1, x2), max(x1, x2) + 1):
+                    mapping[(x, y1)] += 1
+            elif np.abs(x1-x2) == np.abs(y1-y2):
+                # Diagonal
+                xarange = range(x1, x2 + 1 if x2 > x1 else x2 - 1, 1 if x2 > x1 else -1)
+                yarange = range(y1, y2 + 1 if y2 > y1 else y2 - 1, 1 if y2 > y1 else -1)
+                for x, y in zip(xarange, yarange):
+                    mapping[(x,y)] += 1
+        answer = sum(list(map(lambda x: 1 if x >= 2 else 0, mapping.values())))
+        t_stop = time.perf_counter_ns()
+        return (answer, t_stop-t_start)
 
