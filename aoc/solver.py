@@ -60,6 +60,7 @@ def _mark(num, board):
         for xidx, val in enumerate(row):
             if num == val:
                 board[yidx][xidx] += ',True'
+
 def _hasbingo(board):
     for xidx, row in enumerate(board):
         if all(list(',True' in item for item in row)):
@@ -80,6 +81,7 @@ def _sumofnumbers(board):
                 val = int(item.split(',')[0])
                 summer += val
     return summer
+
             
 class Solutions:
 
@@ -291,7 +293,6 @@ class Solutions:
                 # Vertical
                 for y in range(min(y1, y2), max(y1, y2) + 1):
                     mapping[(x1, y)] += 1
-            
             elif y1 == y2:
                 # Horizontal
                 for x in range(min(x1, x2), max(x1, x2) + 1):
@@ -306,4 +307,45 @@ class Solutions:
         answer = sum(list(map(lambda x: 1 if x >= 2 else 0, mapping.values())))
         t_stop = time.perf_counter_ns()
         return (answer, t_stop-t_start)
+
+    def f2021d6p1(self, data):
+        t_start = time.perf_counter_ns()
+        days = 80
+        # count how many of each timer you have, then you dont need to track all of them!
+        timers = defaultdict(int)
+        for val in data[0].split(','):
+            timers[int(val)] += 1
+        for day in range(days):
+            updated_timers = defaultdict(int)
+            for timer, number in timers.items():
+                if timer > 0:
+                    updated_timers[timer-1] = number
+            updated_timers[6] += timers[0]
+            updated_timers[8] += timers[0]
+            timers = updated_timers
+
+        answer = sum(timers.values())
+        t_stop = time.perf_counter_ns()
+        return (answer, t_stop-t_start)
+
+    def f2021d6p2(self, data):
+        t_start = time.perf_counter_ns()
+        days = 256
+        # count how many of each timer you have, then you dont need to track all of them!
+        timers = defaultdict(int)
+        for val in data[0].split(','):
+            timers[int(val)] += 1
+        for day in range(days):
+            updated_timers = defaultdict(int)
+            for timer, number in timers.items():
+                if timer > 0:
+                    updated_timers[timer-1] = number
+            updated_timers[6] += timers[0]
+            updated_timers[8] += timers[0]
+            timers = updated_timers
+
+        answer = sum(timers.values())
+        t_stop = time.perf_counter_ns()
+        return (answer, t_stop-t_start)
+
 
