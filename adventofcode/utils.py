@@ -4,6 +4,9 @@
 import sys
 import os
 import datetime
+import six.moves
+
+from io import StringIO
 
 
 class colours:
@@ -21,7 +24,7 @@ class defaults:
 
 class validfiles:
     DATA = list(f'd{day}.in' for day in defaults.DAYS)
-    SOLUTION = list(f'd{day}p{part}.in' for day in defaults.DAYS for part in defaults.PARTS)
+    SOLUTION = list(f'd{day}p{part}.py' for day in defaults.DAYS for part in defaults.PARTS)
 
 def VPRINT(msg):
     sys.stdout.write(f'{colours.BOLD}{colours.GREEN}[*]{colours.END}  {msg}\n')
@@ -37,7 +40,7 @@ class printer:
     WORKING = VPRINT
     WARNING = WPRINT
 
-def query_user(true, false):
-    response = input()
+def query_user(true, false, msg):
+    response = input(f'{colours.BOLD}{colours.GREEN}[*]{colours.END}  {msg}')
     return response == true
 
