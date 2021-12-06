@@ -7,7 +7,7 @@ from .utils import printer
 
 def request(year, day):
     root = Path(__file__).parent.parent
-    session_token = Path(root, 'session.token')
+    sessiontoken_path = Path(root, 'session.token')
     data_path = Path(root, 'data', year, f'd{day}.in')
 
     if data_path.exists():
@@ -18,7 +18,7 @@ def request(year, day):
         data_path.touch()
 
     try:
-        with open(session_token) as f:
+        with open(sessiontoken_path) as f:
             cookie = dict(session=f.read().strip())
     except FileNotFoundError:
         printer.ERROR(f'no session token found in root directory ...')
