@@ -1,17 +1,20 @@
 """Varying functions for setting up required directory structure and 
 file naming conventions for the adventofcode pipeline.
-The main four functions to be called from a user created script are:
-    1. find_sessiontoken
-    2. setup_dirs
-    3. verify_dir
-    4. reformat_paths
+Any function starting with an underscore should be treated as a private function
+and NOT be imported from any other modules inside the adventofcode package. 
 
-The rest of the functions implemented in this file are to be trated as
-private, hence the _ before the declared function name. They are utility 
-functions used by the aforementioned public functions. 
+Public functions of this module:
+    $ find_sessiontoken(str)        =>  PosixPath | None
+    $ setup_dirs()                  =>  None
+    $ verify_dir(str)               =>  None
+    $ reformat_paths(str, list)     =>  None
+
+Private _utility functions:
+    $ _setup_dir(str)               =>  None
+    
 
 Authors: Wilhelm Ågren <wagren@kth.se>
-Last edited: 06-12-2021
+Last edited: 07-12-2021
 """
 import os
 import sys
@@ -21,26 +24,29 @@ from pathlib import Path
 from .utils import printer, query_user, defaults, validfiles
 
 
-def find_sessiontoken(*args, **kwargs):
+def find_sessiontoken(*args, f_name='session.token', **kwargs):
     """Look for the `session.token` file in the root 
     of the adventofcode directory. The user has to create
     this file in order to be able to get the requested
     data files from http://adventofcode.com/
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     *args : tuple
         Any number of optional arguments, currently ignored.
+    f_name : str
+        The filename of which the session cookie is supposedly present in.
+        Defaults to 'session.token' as per specified by the naming convention.
     **kargs : dict
         Any number of keyword arguments, currently ignored.
 
-    Returns:
-    --------
+    Returns
+    -------
     PosixPath | None
         Return the found session.token path as PosixPath if it exists, else None.
     """
     root = Path(__file__).parent.parent
-    sessiontoken_path = Path(root, 'session.token')
+    sessiontoken_path = Path(root, f_name)
 
     if sessiontoken_path.exists():
         return sessiontoken_path
@@ -51,15 +57,15 @@ def setup_dirs(*args, **kwargs):
     The respective setup is handled by _setup_dir which takes
     the directory in question and works on it.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     *args : tuple
         Any number of optional arguments, currently ignored.
     **kwargs : dict
         Any number of keyword arguments, currently ignored.
 
-    Returns:
-    --------
+    Returns
+    -------
     None
         Function does not return anything.
     """
@@ -74,8 +80,8 @@ def _setup_dir(subdir_f, *args, **kwargs):
     integrity of the directory if it exsists, otherwise create the
     necessary directories.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     subdir_f : str
         Specifies what required directory to look for and setup, either 'data' or 'solutions'.
     *args : tuple
@@ -83,8 +89,8 @@ def _setup_dir(subdir_f, *args, **kwargs):
     **kwargs : dict
         Any number of keyword arguments, currently ignored.
 
-    Returns:
-    --------
+    Returns
+    -------
     None
         Function does not return anything.
     """
@@ -104,7 +110,30 @@ def _setup_dir(subdir_f, *args, **kwargs):
     printer.WORKING(f'done setting up {subdir_f}/ directory structure!')
 
 def verify_dir(subdir, *args, **kwargs):
-    """docstring missing.
+    """Take a subdirectory, either 'data' or 'solutions', and verify its structure and 
+    look for files violating the naming convention. Store the invalid filenames, and
+    query the user if they want the pipeline to try and automatically fix them.
+    A valid subdirectory structure would only contain directories with name
+    <year> from the set [2016, 2021], and these directories contain files
+    according to the naming convention of the specified subdir.
+    Datafiles should follow the naming convention 'd<day>.in' and solution
+    files should be named 'd<day>p<part>.py' where day and part should be a valid
+    literal, as specified in the utils file. 
+
+    Parameters
+    ----------
+    subdir : str
+        Specifier of what subdirectory to verify+validate.
+    *args : tuple
+        Any number of positional arguments, currently ignored.
+    **kwargs : dict
+        Any number of keyword arguments, currently ignored.
+
+    Returns
+    -------
+    None
+        Function does not return anything. Called functions may throw FileNotFoundError
+        or ValueError exceptions, so possibly try and catch these.
     """
     root = Path(__file__).parent.parent
     subdir = Path(root, subdir)
@@ -116,19 +145,41 @@ def verify_dir(subdir, *args, **kwargs):
         else:
             for datafile in child.iterdir():
                 if not any(datafile.parts[-1] in valid for valid in [validfiles.DATA, validfiles.SOLUTION]):
-                    printer.WARNING(f'{datafile} does not match the naming convention ...')
+                    printer.WARNING(f"{'/'.join(datafile.parts[-3:])} does not match the naming convention ...")
                     datafiles['invalid'].append(datafile)
                     continue
                 datafiles['valid'].append(datafile)
     valid, invalid = map(lambda x: len(x), datafiles.values())
-    printer.WORKING(f'in {subdir} you have {valid} valid file(s), and {invalid} invalid file(s)')
+    printer.WORKING(f'in {subdir.parts[-1]} you have {valid} valid files, and {invalid} invalid files')
     if invalid != 0:
         response = query_user('Y', 'n', f'do you want to try and automatically rename invalid files to match naming convention? [Y/n]')
         if response:
             reformat_paths(subdir, datafiles['invalid'])
 
 def reformat_paths(subdir, files2format, *args, **kwargs):
-    """docstring missing.
+    """Take the specified subdirectory type /subdir/ and the files to format,
+    try to find a compatible new name which follows the naming convention and
+    is based on the old incorrect name. 
+
+    For data files currently only implemented fix of name when file-ending is incorrect.
+    E.g. the file 'd1.inn' would be renamed 'd1.in'.
+
+    TODO: implement a nearest neighobur method of renaming incorrect solution names...
+
+    Parameters
+    ----------
+    subdir : str
+        The specifier of subdirectory to work on, either 'data' or 'solutions'.
+    file2format : list | generator | iterator
+        An iterable container holding the filenames to try and reformat according to naming convention.
+
+    Returns
+    -------
+    None
+        Function directly tries to rename the PosixPath of the incorrectly named filepaths.
+        Ergo, it does not return anyting. Function will throw various exceptions if it tries
+        to rename a file that does not exist or if the filename is so messed up that you can't
+        split it into name.ending parts.
     """
     reformatted_paths = list()
     f_ending_fix = '.in' if subdir.parts[-1] == 'data' else '.py'
@@ -139,15 +190,14 @@ def reformat_paths(subdir, files2format, *args, **kwargs):
             for valid in validfiles_fix:
                 if f_name in valid:
                     reformatted_paths.append((path, f'{f_name}{f_ending_fix}'))
+                    break
         except ValueError:
             printer.ERROR(f'can not rename {path} ...')
-
     for (path, n_file) in reformatted_paths:
-        print(path, n_file)
         try:
             n_file = Path(path.parent, n_file)
             path.rename(n_file)
-            printer.WORKING(f'renaming {path.parts[-1]} => {n_file}')
-        except ValueError:
+            printer.WORKING(f"renaming {'/'.join(path.parts[-3:])} => {'/'.join(n_file.parts[-3:])}")
+        except FileNotFoundError:
             printer.ERROR(f'could not rename {path} to {n_file} ...')
 
