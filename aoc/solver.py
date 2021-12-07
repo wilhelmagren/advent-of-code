@@ -19,6 +19,7 @@ import sys
 import math
 import random
 import numpy as np
+import statistics
 
 from collections import defaultdict, Counter
 
@@ -347,5 +348,19 @@ class Solutions:
         answer = sum(timers.values())
         t_stop = time.perf_counter_ns()
         return (answer, t_stop-t_start)
+    
+    def f2021d7p1(self, data):
+        t_start = time.perf_counter_ns()
+        data = list(map(lambda x: int(x), data[0].split(',')))
+        median = statistics.median(data)
+        answer = int(sum(list(map(lambda x: np.abs(x - median), data))))
+        t_stop = time.perf_counter_ns()
+        return (answer, t_stop-t_start)
 
+    def f2021d7p2(self, data):
+        t_start = time.perf_counter_ns()
+        data = list(map(lambda x: int(x), data[0].split(',')))
+        answer = min(list(sum(list(map(lambda x: int(np.abs(x-val)*(np.abs(x-val) + 1)/2), data))) for val in data))
+        t_stop = time.perf_counter_ns()
+        return (answer, t_stop-t_start)
 
