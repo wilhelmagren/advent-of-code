@@ -1,4 +1,17 @@
-"""
+"""Global utility functions as part of the adventofcode package.
+Contains four classes for: default values, valid files, printing, & colours.
+
+Public functions in this file:
+    $ query_user(str, str, str)     =>  bool
+    $ get_ydp(PosixPath)            =>  tuple
+    $ validate_arg(Namespace)       =>  dict
+
+Private utility functions:
+    $ _valid(str, list)             =>  bool
+
+
+Authors: Wilhelm Ågren <wagren@kth.se>
+Last edited: 07-12-2021
 """
 
 import sys
@@ -7,7 +20,6 @@ import datetime
 import six.moves
 
 from io import StringIO
-
 
 class colours:
     BLUE = '\033[94m'
@@ -43,4 +55,32 @@ class printer:
 def query_user(true, false, msg):
     response = input(f'{colours.BOLD}{colours.GREEN}[*]{colours.END}  {msg}')
     return response == true
+
+def get_ydp(solutionpath):
+    string = solutionpath.parts[-1]
+    year = solutionpath.parts[-2]
+    string = string.split('.')
+    part = string[0][-1]
+    day = ''.join(string[0].split('p')[0][1:])
+    return year, day, part
+
+def validate_args(args):
+    arg_dict = vars(args)
+    for key, val in arg_dict.items():
+        if not _valid(key, val):
+            raise ValueError(
+                    f'{key=} argument is not valid, {val=}')
+    return arg_dict
+
+def _valid(key, vals):
+    if key in ('verbose', 'setup', 'run'):
+        return True
+    mapping = dict(years=defaults.YEARS, days=defaults.DAYS, parts=defaults.PARTS)
+    requirements = [
+            all(map(lambda x: x in mapping[key], vals)),
+            len(vals) <= len(mapping[key]),
+            all(map(lambda x: type(x) is str, vals))
+            ]
+    return all(requirements)
+
 
