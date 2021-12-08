@@ -33,13 +33,15 @@ if __name__ == '__main__':
     solver = Solver(args)
     sessiontoken = find_sessiontoken()
     if not sessiontoken:
-        printer.ERROR(f'')
+        printer.ERROR(f'could not find a `session.token` file in the root directory of this file.\n     Any http GET requests for input data from https://adventofcode.com/ will be unsuccessful ...')
     else:
-        printer.WORKING(f'using {sessiontoken} as cookie for http GET request if data file is missing.')
+        printer.WORKING(f'using `{sessiontoken.parts[-1]}` as cookie for http GET request if data file is missing.')
     if args['setup']:
         setup_dirs()
     if args['run']:
-        solver.run()
+        solver.run(log_success=True)
         if args['verbose']:
             solver.stats()
+        else:
+            solver.answers()
 
