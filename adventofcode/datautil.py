@@ -1,7 +1,11 @@
-"""docstring missing.
+"""Data-utility functions. Asynchronuous http GET utilizing the requests library,
+generator for pathfiles and a list cleaner that removes PosixPaths which are not
+existing. I think that currently the private method _clean_pathfiles is not used,
+this is deprecated and the hack replacing this is implemented directly in the 
+Solver.run() method. 
 
 Authors: Wilhelm Ågren <wagren@kth.se>
-Last edited: 07-12-2021
+Last edited: 08-12-2021
 """
 import os
 import asyncio
@@ -104,7 +108,7 @@ def get_filepaths(*args, tpe=None):
     printer.ERROR(f'unknown type specifier, {tpe=}')
     raise ValueError
 
-def _clean_pathlist(lst, tpe):
+def _clean_pathlist(lst):
     """Take a list and specifier for subdirectory and remove the files which are non-existant.
     Does not make sure that the contents of the files are valid, only cleans out the files
     that do not exists. Make sure your implementations are bugfree!
@@ -113,19 +117,12 @@ def _clean_pathlist(lst, tpe):
     ----------
     lst : list
         The iterable which holds the filepaths.
-    tpe : str
-        Subdirectory specifier.
 
     Returns
     -------
     list
-        Returns the given list but cleaned. Function may raise a ValueError if the subdirectory
-        specifier is not recognized.
+        Returns the given list but cleaned based on the condition that the filepath
+        has to exist and be accessible downwards from the root file.
     """
-    if tpe == 'data':
-        return list(filepath for filepath in lst if Path(Path(__file__).parent.parent, filepath).exists())
-    elif tpe == 'solutions':
-        return list(filepath for filepath in lst if Path(Path(__file__).parent.parent, filepath).exists())
-    printer.ERROR(f'unknown type specifier, {tpe=}')
-    raise ValueError
+    return list(filepath for filepath in lst if Path(Path(__file__).parent.parent, filepath).exists())
 
