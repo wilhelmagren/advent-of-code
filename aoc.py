@@ -3,14 +3,13 @@ import os
 import sys
 
 from adventofcode.solver import Solver
-from adventofcode.utils import defaults, validate_args
+from adventofcode.utils import defaults, printer, validate_args
 from adventofcode.setup import setup_dirs, find_sessiontoken
 from adventofcode.datautil import request
 
 
-
 def argparser(*args, **kwargs):
-    parser = argparse.ArgumentParser(prog='adventofcode-py pipeline',
+    parser = argparse.ArgumentParser(prog='python aoc.py',
                         description='Streamlined Advent of Code pipeline so that you can help save christmas as easily as possible!',
                         epilog='We have to save christmas!',
                         argument_default=None)
@@ -32,9 +31,15 @@ if __name__ == '__main__':
     args = argparser()
     args = validate_args(args)
     solver = Solver(args)
+    sessiontoken = find_sessiontoken()
+    if not sessiontoken:
+        printer.ERROR(f'')
+    else:
+        printer.WORKING(f'using {sessiontoken} as cookie for http GET request if data file is missing.')
     if args['setup']:
         setup_dirs()
     if args['run']:
         solver.run()
         if args['verbose']:
             solver.stats()
+
