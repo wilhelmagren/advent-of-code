@@ -97,7 +97,7 @@ class Solver:
                 else:
                     self.results[(year, day, part)] = result.stdout.split(' ')
         if log_success:
-            printer.WORKING(f'done! {len(self.results)} successful implementations.')
+            printer.WORKING(f'done running your solutions! {len(self.results)} successful implementations.')
 
     def answers(self, padding=8):
         """Print the collected answers for the solved solutions.
