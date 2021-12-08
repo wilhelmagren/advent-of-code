@@ -32,6 +32,11 @@ async def request(year, day):
     year=2021,day=02,part=1 and part=2, only one request will be made for
     the year and day.
 
+    Important to note is that this function does NOT return the requested
+    data. It is simply saved to the specific file in the `data/` subdir.
+    It can later be read in the solution file that is invoked with the
+    subprocess library.
+
     Parameters
     ----------
     year : str
@@ -39,12 +44,6 @@ async def request(year, day):
     day : str
         The day to request problem input from.
 
-    Returns
-    -------
-    None
-        Function will not return anything, i.e. it will not attempt
-        to read the donwloaded data file and return it's contents
-        to the user. This is handled per each problem solution.
     """
     root = Path(__file__).parent.parent
     sessiontoken_path = Path(root, 'session.token')
@@ -98,6 +97,7 @@ def get_filepaths(*args, tpe=None):
     -------
     list
         The cleaned version of the list containing all valid available filepaths.
+
     """
     if tpe == 'data':
         years, days = args
@@ -123,6 +123,7 @@ def _clean_pathlist(lst):
     list
         Returns the given list but cleaned based on the condition that the filepath
         has to exist and be accessible downwards from the root file.
+
     """
     return list(filepath for filepath in lst if Path(Path(__file__).parent.parent, filepath).exists())
 
