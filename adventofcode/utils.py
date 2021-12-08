@@ -17,9 +17,6 @@ Last edited: 07-12-2021
 import sys
 import os
 import datetime
-import six.moves
-
-from io import StringIO
 
 class colours:
     BLUE = '\033[94m'
