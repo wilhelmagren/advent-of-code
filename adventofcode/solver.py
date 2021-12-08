@@ -1,7 +1,7 @@
 """docstring missing.
 
 Authors: Wilhelm Ågren <wagren@kth.se>
-Last edited: 07-12-2021
+Last edited: 08-12-2021
 """
 import time
 import subprocess
@@ -21,7 +21,14 @@ class Solver:
         self._setup(*args, **kwargs)
     
     def _setup(self, args, **kwargs):
-        """docstring missing.
+        """private setup function for the Solver class, called when __init__
+        after __new__. Extracts the given arguments from the CLI and also
+        generates valid data- and solution filepaths that is later iterated
+        in the run method. Create an attribute dictionary which stores the
+        stdout from the subprocess and later be used in the stats method.
+        and indirectly expects it to be a string
+        of the form `<answer> <io_time> <solution_time>`. If the subprocess
+        captures anything from stderr then no result is stored and an error
         """
         self.verbose = args['verbose']
         self.years = args['years']
@@ -31,10 +38,11 @@ class Solver:
         self.solution_filepaths = get_filepaths(self.years, self.days, self.parts, tpe='solutions')
         self.results = dict()
 
-    def run(self, *args, **kwargs):
+    def run(self, log_success=False):
         """docstring missing.
         """
         root = Path(__file__)
+        printer.WORKING(f'running your solutions, this might take a while ...')
         for solution, datafile in zip(self.solution_filepaths, self.data_filepaths):
             datapath = Path(root.parent.parent, datafile)
             solutionpath = Path(root.parent.parent, solution)
@@ -44,8 +52,21 @@ class Solver:
                     asyncio.run(request(year, day))
                 result = subprocess.run(['python3', str(solutionpath), str(datapath)], capture_output=True, text=True)
                 if result.stderr:
-                    print(result.stderr)
-                self.results[(year, day, part)] = result.stdout.split(' ')
+                    logger.ERROR(f'error caught when solving {year=} {day=} {part=}: {result.stderr}')
+                else:
+                    self.results[(year, day, part)] = result.stdout.split(' ')
+        if log_success:
+            printer.WORKING(f'done! {len(self.results)} successful implementations.')
+
+    def answers(self, padding=8):
+        print(f'\n{colours.BOLD}   Problem           Answer')
+        print(f'==============================={colours.END}')
+        for key, val in self.results.items():
+            year, day, part = key
+            answer, _, _ = val
+            answer = f'{answer}'.center(padding+padding+1)
+            print(f'  {year}-{int(day):02d}-{int(part)}    {answer}      ')
+
 
     def stats(self, decimals=2, padding=8, precision='ms'):
         mapping = dict(s=1e9, ms=1e6, us=1e3, ns=1)
@@ -79,18 +100,4 @@ class Solver:
             t_time = f'{t_time:.2f}'.center(padding)
             answer = f'{answer}'.center(padding+padding+1)
             print(f'  {year}-{int(day):02d}-{int(part)}    {answer}      {t_colour}{t_time}ms{colours.END}            {d_colour}{d_time}ms{colours.END}            {s_colour}{s_time}ms{colours.END}\n')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
