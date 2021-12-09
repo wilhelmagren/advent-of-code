@@ -93,7 +93,7 @@ class Solver:
                     asyncio.run(request(year, day))
                 result = subprocess.run(['python3', str(solutionpath), str(datapath)], capture_output=True, text=True)
                 if result.stderr:
-                    logger.ERROR(f'error caught when solving {year=} {day=} {part=}: {result.stderr}')
+                    printer.ERROR(f'error caught when solving {year=} {day=} {part=}: {result.stderr}')
                 else:
                     self.results[(year, day, part)] = result.stdout.split(' ')
         if log_success:
