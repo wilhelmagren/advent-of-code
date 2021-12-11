@@ -1,5 +1,9 @@
-"""Template for the adventofcode package pipeline.
-Replace answer=None with your solution.
+"""
+10-12-2021
+Part 2
+
+Author: Wilhelm Ågren <wagren@kth.se>
+Last edited: 10-12-2021
 """
 import time
 import sys
@@ -8,7 +12,6 @@ import fileinput as fi
 def run(data, io_time):
     t_start = time.perf_counter_ns()
     scores = {')': 1, ']': 2, '}': 3, '>': 4}
-    openings = ['(', '[', '{', '<']
     c2o = {')':'(', ']':'[','}':'{','>':'<'}
     o2c = {'(':')', '[':']','{':'}','<':'>'}
     corrections = []
@@ -16,7 +19,7 @@ def run(data, io_time):
         openingstack = []
         breaker = False
         for char in line:
-            if char not in openings:
+            if char not in o2c:
                 if openingstack[-1] != c2o[char]:
                     breaker = True
                 else:
@@ -39,8 +42,6 @@ def run(data, io_time):
 if __name__ == '__main__':
     t_start = time.perf_counter_ns()
     data = list(line.rstrip() for line in fi.input())
-    #data = "[({(<(())[]>[[{[]{<()<>>\n[(()[<>])]({[<{<<[]>>(\n{([(<{}[<>[]}>{[]{[(<()>\n(((({<>}<{<{<>}{[]{[]{}\n[[<[([]))<([[{}[[()]]]\n[{[{({}]{}}([{[{{{}}([]\n{<[[]]>}<{[{[{[]{()[[[]\n[<(<(<(<{}))><([]([]()\n<{([([[(<>()){}]>(<<{{\n<{([{{}}[<[[[<>{}]]]>[]]".split('\n')
-    #data = "{([(<{}[<>[]}>{[]{[(<()>\n(((({<>}<{<{<>}{[]{[]{}".split('\n')
     t_stop = time.perf_counter_ns()
     run(data, t_stop-t_start)
 

@@ -1,5 +1,9 @@
-"""Template for the adventofcode package pipeline.
-Replace answer=None with your solution.
+"""
+10-12-2021
+Part 1
+
+Author: Wilhelm Ågren <wagren@kth.se>
+Last edited: 10-12-2021
 """
 import time
 import sys
