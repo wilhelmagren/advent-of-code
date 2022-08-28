@@ -1,5 +1,8 @@
 """Template for the adventofcode package pipeline.
 Replace answer=None with your solution.
+
+
+this is possibly deprecated depending on the to-be implemented new structure...
 """
 import time
 import sys
