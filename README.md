@@ -1,5 +1,14 @@
-# Advent-of-Code package for Python 🎄 🌟
-This repository contains the `adventofcode` python package which enables a streamlined and simple coding experience so that you can help save christmas! It is written using mostly built-in libraries, except for the dependency of [numpy](https://numpy.org/). If you find any bug or have suggestions on how to improve this package, go down to the contact section to see where you can reach me. Otherwise, just clone it and create a PR of the feature you want to add or fix.
+# Python Advent-of-Code package 🎄 🌟
+This repository contains code for a Python module that enables streamlined
+loading, solving, and answering of the `Advent of Code (AoC)` christmas
+questions. It is written with the intention of offering the end user more
+insight into memory usage, time complexity etc. for their provided solutions to
+the AoC questions. Currently it only supports solutions written in Python but
+allowing the user to answer in e.g. C, C++, Rust, etc. is a future feature that
+I am looking into.
+
+If you find any bug or have any suggestions on how to improve this package, go
+down to the contact section to see full contribution guidelines [WIP].
 
 ## Directory setup
 To run the streamlined pipeline it requires a specific directory structure. All data files should follow the naming convention of `d<day>.in` and be placed in `data/<year>/`. All solutions should follow the naming convention `d<day>p<part>.py` and be placed in `solutions/<year>/`. The package has a module for setting up the required directory structure automatically, but if you want to manually transfer files/solutions, make sure that your directory looks accordingly:
@@ -54,6 +63,7 @@ We have to save christmas!
 ```
 
 ## Contact and license
-If you have any suggestions on how to improve this pipeline, contact me or create a pull request!
-<br>Author: Wilhelm Ågren, wagren@kth.se
-<br>License: GNU General Public License v3.0
+TODO: WRITE CONTRIBUTION GUIDELINES
+<br>Author: Wilhelm Ågren, wilhelmagren98@gmail.com
+<br>All code is under an Apache-2.0 styled license, please see
+[LICENSE](https://github.com/willeagren/advent-of-code/blob/rewrite-complete/LICENSE)
