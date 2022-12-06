@@ -37,6 +37,18 @@ __all__ = (
 )
 
 def find_sessiontoken(f_name='session.token'):
+    """ Try and locate the file containing the session token (cookie) needed 
+    to make requests to the advent of code website. 
+    
+    Parameters
+    ----------
+    f_name: str
+        The name of the file containing the session token.
+    
+    Either returns the filepath as a Path object, otherwise raises an exception
+    if the file does not exist. Searches the root directory.
+    
+    """
     root = Path(__file__).parent.parent
     sessiontoken_path = Path(root, f_name)
 
@@ -47,11 +59,13 @@ def find_sessiontoken(f_name='session.token'):
         f'Could not find session token (cookie) file: {f_name} in root directory {root}'
     )
 
-def setup_dirs(*args, **kwargs):
+def setup_dirs():
+    """ Starter function for setting up the data/ and solutions/ directories. """
     for subdir in ['data', 'solutions']:
         _setup_dir(subdir)
 
-def _setup_dir(subdir_f, *args, **kwargs):
+def _setup_dir(subdir_f):
+    """ """
     root = Path(__file__).parent.parent
     subdir = Path(root, subdir_f)
     if subdir.exists():
@@ -67,7 +81,8 @@ def _setup_dir(subdir_f, *args, **kwargs):
             subsubdir.mkdir()
     printer.WORKING(f'done setting up {subdir_f}/ directory structure!')
 
-def verify_dir(subdir, *args, **kwargs):
+def verify_dir(subdir):
+    """ """
     root = Path(__file__).parent.parent
     subdir = Path(root, subdir)
     datafiles = dict(valid=list(), invalid=list())
