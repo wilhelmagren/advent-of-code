@@ -1,50 +1,37 @@
-"""Data-utility functions. Asynchronuous http GET utilizing the requests library,
-generator for pathfiles and a list cleaner that removes PosixPaths which are not
-existing. I think that currently the private method _clean_pathfiles is not used,
-this is deprecated and the hack replacing this is implemented directly in the 
-Solver.run() method. 
+"""
+MIT License
 
-Authors: Wilhelm Ågren <wagren@kth.se>
-Last edited: 08-12-2021
+Copyright (c) 2022 Neurocode
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+File created: 2021-12-01
+Last updated: 2022-12-01
 """
 import os
 import asyncio
-
 from pathlib import Path
 from requests import get, HTTPError
 from .utils import printer
 
 
 async def request(year, day):
-    """Try to send a http GET request to `https://adventofcode/` and download
-    the input data for the specified problem. If there already exists a data
-    file for the problem, let user know and don't request anything.
-    If there is no prior datafile for the problem, asyncronously send the 
-    GET request with together with the user cookie called `session.token`.
-    This token is required since each datafile is different from user
-    to user; also to access a puzzle input one has to be logged in on the
-    website. If there is no user cookie, or no file `session.token`, then
-    the function raises a `FileNotFoundError` letting the user know that 
-    they have to set up the cookie. 
-
-    There are ofcourse two parts for each problem, but they share the same
-    input data, so if the user is missing the data for both solution
-    year=2021,day=02,part=1 and part=2, only one request will be made for
-    the year and day.
-
-    Important to note is that this function does NOT return the requested
-    data. It is simply saved to the specific file in the `data/` subdir.
-    It can later be read in the solution file that is invoked with the
-    subprocess library.
-
-    Parameters
-    ----------
-    year : str
-        Specifies what adventofcode year the problem is from.
-    day : str
-        The day to request problem input from.
-
-    """
     root = Path(__file__).parent.parent
     sessiontoken_path = Path(root, 'session.token')
     data_path = Path(root, 'data', year, f'd{day}.in')
@@ -79,26 +66,6 @@ async def request(year, day):
 
 
 def get_filepaths(*args, tpe=None):
-    """Generate a list of all valid filepath names for the specified type.
-    The valid types are either 'data' or 'solutions'. The splatted arg tuple
-    is broadcasted into the specific years/days/parts based on the given type.
-    
-    Parameters
-    ----------
-    *args : (list, list) | (list, list, list)
-        Either called with years, days, parts or years, days depending on the
-        specified type. As mentioned, these are broadcasted on based on the type.
-        The order is specific, can not be 
-    tpe : str | None
-        Either 'data' or 'solutions' are valid keyword arguments. Otherwise function
-        raises a ValueError because of unknown type specifier.
-
-    Returns
-    -------
-    list
-        The cleaned version of the list containing all valid available filepaths.
-
-    """
     if tpe == 'data':
         years, days = args
         return list(map(lambda x: [x, x], list(f'data/{year}/d{day}.in' for year in years for day in days)))
@@ -109,21 +76,5 @@ def get_filepaths(*args, tpe=None):
     raise ValueError
 
 def _clean_pathlist(lst):
-    """Take a list and specifier for subdirectory and remove the files which are non-existant.
-    Does not make sure that the contents of the files are valid, only cleans out the files
-    that do not exists. Make sure your implementations are bugfree!
-
-    Parameters
-    ----------
-    lst : list
-        The iterable which holds the filepaths.
-
-    Returns
-    -------
-    list
-        Returns the given list but cleaned based on the condition that the filepath
-        has to exist and be accessible downwards from the root file.
-
-    """
     return list(filepath for filepath in lst if Path(Path(__file__).parent.parent, filepath).exists())
 
