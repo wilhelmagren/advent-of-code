@@ -22,10 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 File created: 2021-12-01
-Last updated: 2022-12-01
+Last updated: 2022-12-06
 """
 import sys
-from .utils import printer, query_user, defaults, validfiles
+from adventofcode.utils import printer, query_user, defaults, validfiles
 from pathlib import Path
 from collections import defaultdict
 
@@ -36,13 +36,16 @@ __all__ = (
     'reformat_paths',
 )
 
-def find_sessiontoken(*args, f_name='session.token', **kwargs):
+def find_sessiontoken(f_name='session.token'):
     root = Path(__file__).parent.parent
     sessiontoken_path = Path(root, f_name)
 
     if sessiontoken_path.exists():
         return sessiontoken_path
-    return None
+    
+    raise FileNotFoundError(
+        f'Could not find session token (cookie) file: {f_name} in root directory {root}'
+    )
 
 def setup_dirs(*args, **kwargs):
     for subdir in ['data', 'solutions']:
