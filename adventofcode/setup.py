@@ -32,7 +32,7 @@ from collections import defaultdict
 __all__ = (
     'find_sessiontoken',
     'setup_dirs',
-    'verify_dirs',
+    'verify_dir',
     'reformat_paths',
 )
 
