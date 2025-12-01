@@ -1,3 +1,6 @@
+mod d1;
+
 fn main() {
-    println!("Hello, world!");
+    d1::p1("./res/d1.txt");
+    d1::p2("./res/d1.txt");
 }
