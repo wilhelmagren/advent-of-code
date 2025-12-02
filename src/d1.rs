@@ -56,7 +56,7 @@ pub fn p1(path: &str) {
             cnt += 1;
         }
     }
-    println!("{}", cnt);
+    println!("d1p1: {}", cnt);
 }
 
 /// Now also count each time the dial 'goes over' 0,
@@ -99,7 +99,7 @@ pub fn p2(path: &str) {
         }
     }
 
-    println!("{}", cnt);
+    println!("d1p2: {}", cnt);
 }
 
 #[cfg(test)]
