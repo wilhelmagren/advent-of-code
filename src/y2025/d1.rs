@@ -41,7 +41,7 @@ impl Rotation {
 //
 // Rust modulu '%' is not modulu, heh, it is remainder...
 // But we can use the `rem_euclid` method to calculate what we are after.
-pub fn p1(path: &str) {
+pub fn p1(path: &str) -> String {
     let puzzle = fs::read_to_string(path).unwrap();
     let mut dial: i32 = 50;
     let mut cnt: i32 = 0;
@@ -56,12 +56,13 @@ pub fn p1(path: &str) {
             cnt += 1;
         }
     }
-    println!("d1p1: {}", cnt);
+
+    cnt.to_string()
 }
 
 /// Now also count each time the dial 'goes over' 0,
 /// each time! Because it can rotate many full times.
-pub fn p2(path: &str) {
+pub fn p2(path: &str) -> String {
     let puzzle = fs::read_to_string(path).unwrap();
     let mut dial: i32 = 50;
     let mut cnt: i32 = 0;
@@ -99,7 +100,7 @@ pub fn p2(path: &str) {
         }
     }
 
-    println!("d1p2: {}", cnt);
+    cnt.to_string()
 }
 
 #[cfg(test)]
@@ -107,12 +108,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn p1_example() {
-        p1("./res/d1-example.txt");
+    fn d1p1_example() {
+        println!("d1p1 example: {}", p1("./res/2025/d1-example.txt"));
     }
 
     #[test]
-    fn p2_example() {
-        p2("./res/d1-example.txt");
+    fn d1p2_example() {
+        println!("d1p2 example: {}", p2("./res/2025/d1-example.txt"));
     }
 }

@@ -2,7 +2,7 @@ use std::fs;
 
 // Invalid IDs are IDs which are made up uf some sequence of digits
 // repeated twice, e.g., 55 (5 twice), 6464 (64 twice), 123123 (123 twice).
-pub fn p1(path: &str) {
+pub fn p1(path: &str) -> String {
     let mut puzzle = fs::read_to_string(path).unwrap();
     let mut invalids: i64 = 0;
 
@@ -31,7 +31,8 @@ pub fn p1(path: &str) {
             }
         }
     }
-    println!("d2p1: {}", invalids);
+
+    invalids.to_string()
 }
 
 // Now an ID is invalid if it is only made only of some sequence of
@@ -45,7 +46,7 @@ pub fn p1(path: &str) {
 //  - 3
 // If the length of the ID is 5 digits, we can have invalid IDs with sequences of length:
 //  - 1
-pub fn p2(path: &str) {
+pub fn p2(path: &str) -> String {
     let mut puzzle = fs::read_to_string(path).unwrap();
     let mut invalids: i64 = 0;
 
@@ -106,7 +107,8 @@ pub fn p2(path: &str) {
             }
         }
     }
-    println!("d2p2: {}", invalids);
+
+    invalids.to_string()
 }
 
 #[cfg(test)]
@@ -114,12 +116,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn p1_example() {
-        p1("./res/d2-example.txt");
+    fn d2p1_example() {
+        println!("d2p1 example: {}", p1("./res/2025/d2-example.txt"));
     }
 
     #[test]
-    fn p2_example() {
-        p2("./res/d2-example.txt");
+    fn d2p2_example() {
+        println!("d2p2 example: {}", p2("./res/2025/d2-example.txt"));
     }
 }
